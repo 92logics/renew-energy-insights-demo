@@ -1,0 +1,67 @@
+openapi: 3.0.3
+info:
+  title: Energy Insights API (demo sketch by 92 Logics)
+  version: 0.3.0-demo
+  description: Illustrative API for a multi-tenant energy-insights platform. Fictional data. Every call is scoped by the tenant claim in the bearer token; a path/claim mismatch returns 403.
+servers:
+  - url: https://api.example.invalid
+security:
+  - bearer: []
+paths:
+  /v1/tenants/{tenant}/config:
+    get:
+      summary: Tenant white-label configuration (theme, tariff, features, locale)
+      parameters: [ { $ref: '#/components/parameters/tenant' } ]
+      responses: { '200': { description: OK }, '403': { description: Tenant claim mismatch } }
+  /v1/tenants/{tenant}/households:
+    get:
+      summary: Households in this tenant
+      parameters: [ { $ref: '#/components/parameters/tenant' } ]
+      responses: { '200': { description: OK } }
+  /v1/tenants/{tenant}/households/{hh}/readings:
+    get:
+      summary: Half-hourly import readings (kWh per 30 min)
+      parameters: [ { $ref: '#/components/parameters/tenant' }, { $ref: '#/components/parameters/hh' }, { name: date, in: query, schema: { type: string, format: date } } ]
+      responses: { '200': { description: OK } }
+  /v1/tenants/{tenant}/households/{hh}/summary:
+    get:
+      summary: Usage and cost summary for a period
+      parameters: [ { $ref: '#/components/parameters/tenant' }, { $ref: '#/components/parameters/hh' }, { name: period, in: query, schema: { type: string, example: P7D } } ]
+      responses: { '200': { description: OK } }
+  /v1/tenants/{tenant}/households/{hh}/recommendations:
+    get:
+      summary: Load-shifting recommendations with estimated savings and confidence
+      parameters: [ { $ref: '#/components/parameters/tenant' }, { $ref: '#/components/parameters/hh' } ]
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  modelVersion: { type: string }
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        appliance: { type: string }
+                        habitualStart: { type: string, example: '18:00' }
+                        suggestedStart: { type: string, example: '23:00' }
+                        savingPerMonth: { type: number }
+                        co2KgPerMonth: { type: number }
+                        confidence: { type: number }
+  /v1/tenants/{tenant}/market/price-forecast:
+    get:
+      summary: Day-ahead price forecast (EUR/MWh) used for dynamic suggestions
+      parameters: [ { $ref: '#/components/parameters/tenant' } ]
+      responses: { '200': { description: OK } }
+components:
+  securitySchemes:
+    bearer: { type: http, scheme: bearer, bearerFormat: JWT }
+  parameters:
+    tenant: { name: tenant, in: path, required: true, schema: { type: string } }
+    hh: { name: hh, in: path, required: true, schema: { type: string, pattern: '^[A-Z]{2}-\d{4}$' } }
+x-mqtt:
+  publish: 'ei/{tenant}/meters/{meterId}/readings (QoS 1, JSON, see docs/architecture.md §3)'

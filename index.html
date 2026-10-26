@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Energy Insights — white-label demo by 92 Logics</title>
+<meta name="description" content="Demo by 92 Logics: multi-retailer smart-meter energy insights PWA with simulated half-hourly data, time-of-use prices, load-shifting suggestions and mock MQTT ingestion. Fictional data.">
+<meta name="theme-color" content="#0b6e4f">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<a class="skip" href="#main" data-i18n="skip">Skip to main content</a>
+<div class="demo-banner" role="note" id="demoBanner"><strong>Demo by 92 Logics</strong> · <span data-i18n="banner">All data is fictional and simulated</span></div>
+<div class="offline" id="offlineBar" hidden data-i18n="offline">You are offline.</div>
+<header class="topbar">
+  <div class="brand" id="brand" aria-live="polite"></div>
+  <div class="pickers">
+    <label><span data-i18n="retailer">Retailer (tenant)</span>
+      <select id="tenantSel" data-testid="tenant"></select></label>
+    <label><span data-i18n="household">Household</span>
+      <select id="hhSel" data-testid="household"></select></label>
+    <label><span data-i18n="language">Language</span>
+      <select id="langSel" data-testid="lang"><option value="en">English</option><option value="pl">Polski</option></select></label>
+    <button id="installBtn" class="btn ghost" hidden data-i18n="install">Install app</button>
+  </div>
+</header>
+<nav class="tabs" aria-label="Main">
+  <a href="#home" data-view="home"><span aria-hidden="true">⌂</span> <span data-i18n="nav_home">Home</span></a>
+  <a href="#save" data-view="save"><span aria-hidden="true">€</span> <span data-i18n="nav_insights">Save</span></a>
+  <a href="#live" data-view="live"><span aria-hidden="true">⇅</span> <span data-i18n="nav_live">Live data</span></a>
+  <a href="#admin" data-view="admin"><span aria-hidden="true">⚙</span> <span data-i18n="nav_admin">Retailer admin</span></a>
+  <a href="#api" data-view="api"><span aria-hidden="true">{ }</span> <span data-i18n="nav_api">API &amp; pipeline</span></a>
+</nav>
+<main id="main" tabindex="-1"></main>
+<footer class="foot">
+  <p>Demo by <strong>92 Logics</strong> (Islamabad, Pakistan) to illustrate an approach. All retailers, households, meters, prices and carbon figures are <strong>fictional and simulated</strong>. No affiliation with, or endorsement by, any university, research project, network operator or electricity retailer is claimed or implied.
+  Source: <a href="https://github.com/92logics/renew-energy-insights-demo">github.com/92logics/renew-energy-insights-demo</a> · Architecture: <a href="https://github.com/92logics/renew-energy-insights-demo/blob/main/docs/architecture.md">docs/architecture.md</a></p>
+</footer>
+<script src="js/data.js"></script>
+<script src="js/ml.js"></script>
+<script src="js/mqtt.js"></script>
+<script src="js/api.js"></script>
+<script src="js/i18n.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
